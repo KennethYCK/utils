@@ -99,6 +99,6 @@ foreach($node in $all_node)
     Add_Poller "N.Cpu.SNMP.HrProcessorLoad" $nodeID
     Add_Poller "N.Memory.SNMP.HrStorage" $nodeID
 
-    Invoke-SwisVerb $swis pollnow "N:$($nodeid)"
+    Invoke-SwisVerb $swis Orion.Nodes pollnow "N:$($nodeid)"
 
 }
