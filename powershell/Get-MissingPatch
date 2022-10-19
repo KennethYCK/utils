@@ -1,0 +1,24 @@
+<#
+.SYNOPSIS
+    Get Computer remain what patch not install yet from WSUS
+#>
+function Get-MissingPatch
+{
+    param(
+    [Parameter(Mandatory=$true)]
+    [String[]]$ComputerName,
+   
+    $WSUSServername ="localhost"
+    $port = 8530
+    )
+
+    $wsusserver=Get-WsusServer -name $WSUSServername -PortNumber $port
+    
+    
+    $allpatch=($wsusserver.GetComputerTargetbyName($ComputerName)).GetUpdateInstallationInfoPerUpdate() |? ($_.UpdateInstallationstate -eq "NotInstall")
+
+    $allpatch| ?{($_.Classification -eq "Security Updates" ) -or  ($_.Classification -eq "Critical Updates" ) } | Get-WsusUpdate -updateid $_.UpdateId
+        
+    
+
+}
